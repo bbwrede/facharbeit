@@ -8,10 +8,12 @@ class Server
     
     private ServerSocket srvs;
     private ConnectionManager cm;
-
+    private Processor proc;
     
     public Server ()
     {
+        proc = new Processor ();
+        proc.start ();
         cm = new ConnectionManager ();
 
         try {
@@ -46,7 +48,7 @@ class Server
         return srv;
     }
 
-    public static setServer (Server pSrv)
+    public static void setServer (Server pSrv)
     {
         srv = pSrv;
     }

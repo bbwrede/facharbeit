@@ -4,12 +4,11 @@ class ClientConnection extends Thread
     private Socket socket;
 
     private InputStream ins;
-    private OutputStream outs;
-
     private Scanner scanner;
 
-    private AbstractQueue outputQueue;
-    private 
+    private OutputStream outs;
+    private AbstractQueue<Command> outputQueue;
+    private BufferedWriter outputWriter; 
 
     public ClientConnection (Socket pSocket)
     {
@@ -20,6 +19,9 @@ class ClientConnection extends Thread
 
         scanner = new Scanner (ins);
         scanner.useDelimiter ("%");
+
+        outputQueue = new AbstractQueue<Command> ();
+        outputWriter = new BufferedWriter (outs);
     }
 
     public void run ()
@@ -36,8 +38,11 @@ class ClientConnection extends Thread
 
             if (!outputQueue.isEmpty ())
             {
-                
+                String cmd = outputQueue.remove ().toString ();
+                outputWriter.write (cmd, 0, cmd.length ());
             }
+
+            Thread.sleep (50);
         }
     }
 }
