@@ -4,7 +4,9 @@ import java.lang.Exception.*;
 
 class Server
 {
-    private ServerSocket ss;
+    private static Server srv;
+    
+    private ServerSocket srvs;
     private ConnectionManager cm;
 
     
@@ -13,7 +15,7 @@ class Server
         cm = new ConnectionManager ();
 
         try {
-            ss = new ServerSocket (53335);
+            srvs = new ServerSocket (53335);
         }
         catch (IOException e)
         {
@@ -39,9 +41,20 @@ class Server
         }
     }
 
+    public static Server getServer ()
+    {
+        return srv;
+    }
+
+    public static setServer (Server pSrv)
+    {
+        srv = pSrv;
+    }
+
     public static void main (String[] args)
     {
-        Server srv = new Server ();
-        srv.run ();
+        Server server = new Server ();
+        setServer (server);
+        server.run ();
     }
 }
