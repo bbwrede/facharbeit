@@ -4,8 +4,10 @@ Protokoll
 =========
 
 > *Anmerkung:* alles was in Caps geschrieben wird ist ein benutzerdefinierter String
-> `$` beginnt eine Nachricht und ist Trennelement zwischen Parametern
+> `$` beginnt eine Nachricht und ist Trennelement zwischen Parametern 
+>
 > `%` ist EOL-Zeichen
+> 
 > Jedes Kommando hat als letztes Argument eine UUID in Normalform. Das erlaubt, dass auf eine
 > Nachricht Bezug genommen werden kann.
 
