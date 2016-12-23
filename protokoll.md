@@ -77,3 +77,4 @@ Server:
 
 mit:  
 *   `user1,user2`: durch Kommas getrennte Liste der Nutzer, die momentan online sind.
+
