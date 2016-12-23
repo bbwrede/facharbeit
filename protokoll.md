@@ -4,6 +4,7 @@ Protokoll
 =========
 
 > *Anmerkung:* alles was in Caps geschrieben wird ist ein benutzerdefinierter String
+>
 > `$` beginnt eine Nachricht und ist Trennelement zwischen Parametern 
 >
 > `%` ist EOL-Zeichen
