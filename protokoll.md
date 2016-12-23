@@ -45,7 +45,8 @@ Client:
 
 ---
 
-*Registriere den Client unter einem Nicknamen*
+*Registriere den Client unter einem Nicknamen*  
+(Ein Nickname darf nur aus Zahlen und kleinen und großen Buchstaben bestehen)
 
     $reg$nick$uuid%
 
@@ -61,5 +62,18 @@ mit
 
 ---
 
-TODO
+*Signalisiere dem Server, dass der Client den Chatroom verlässt*
 
+    $leave$uuid%
+
+
+
+Server:
+-------
+
+*Gebe den Status des Servers zurück*
+
+    $stat$user1,user2...$uuid%
+
+mit:  
+*   `user1,user2`: durch Kommas getrennte Liste der Nutzer, die momentan online sind.
