@@ -6,32 +6,57 @@ Protokoll
 > *Anmerkung:* alles was in Caps geschrieben wird ist ein benutzerdefinierter String
 > `$` beginnt eine Nachricht und ist Trennelement zwischen Parametern
 > `%` ist EOL-Zeichen
+> Jedes Kommando hat als letztes Argument eine UUID in Normalform. Das erlaubt, dass auf eine
+> Nachricht Bezug genommen werden kann.
 
 
 Gemeinsam:
 ----------
 
-    $msg$from$to$NACHRICHT$timestamp$uuid%
+*sendet eine Nachricht von Server zu Client oder umgekehrt.*
+
+    $msg$to$NACHRICHT$timestamp$uuid%
 
 mit  
-*   `from`: Nickname des sendenden Benutzers. Wenn falsch, gibt Server Error zurück (s.u.)
 *   `to`: Nickname des empfangenden Benutzers. Wenn Nachricht an alle gehen soll, `*`
 *   `timestamp`: Zeitstempel der Nachricht
-*   `uuid`: UUID der Nachricht in Normalform. Die infolge der Nachricht gesendete `$rsp$...`-Nachricht hat dieselbe UUID.*
 
-Sendet eine Nachricht von Server zu Client oder umgekehrt.
+---
 
+*Antwort des Servers / des Clients auf ein Kommando des Anderen.*
 
     $rsp$code$uuid%
 
 mit  
 *   `code`: ein Statuscode (s.u.)
-*   `uuid`: UUID des zugehörigen Befehls in Normalform.
-
-Antwort des Servers / des Clients auf ein Kommando des Anderen.
 
 
 
 Client:
 -------
+
+*"Heartbeat:" Signalisiere dem Server dass der Client noch aktiv ist*  
+(Muss alle 2 Minuten gesendet werden, ansonsten schließt der Server die Verbindung)
+
+    $heartbeat$uuid%
+
+---
+
+*Registriere den Client unter einem Nicknamen*
+
+    $reg$nick$uuid%
+
+mit  
+*   `nick`: der gewünschte Nickname
+
+---
+
+*Fordere den Server auf, den Status des Chatrooms zurückzugeben*  
+(Löst beim Server ein `$stat$...`-Kommando aus)
+
+    $getstat$uuid%
+
+---
+
+TODO
 
