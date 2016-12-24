@@ -17,7 +17,7 @@ class Server
         cm = new ConnectionManager ();
 
         try {
-            srvs = new ServerSocket (53335);
+            srvs = new ServerSocket (5335);
         }
         catch (IOException e)
         {

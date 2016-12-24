@@ -1,4 +1,6 @@
 
+import java.util.ArrayList;
+
 class ConnectionManager
 {
     private ArrayList<ClientConnection> connections;

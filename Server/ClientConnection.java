@@ -1,4 +1,11 @@
 
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.util.AbstractQueue;
+import java.util.Scanner;
+
 class ClientConnection extends Thread
 {
     private Socket socket;
