@@ -4,16 +4,20 @@ import java.lang.Exception.*;
 
 class Server
 {
-    private ServerSocket ss;
+    private static Server srv;
+    
+    private ServerSocket srvs;
     private ConnectionManager cm;
-
+    private Processor proc;
     
     public Server ()
     {
+        proc = new Processor ();
+        proc.start ();
         cm = new ConnectionManager ();
 
         try {
-            ss = new ServerSocket (53335);
+            srvs = new ServerSocket (5335);
         }
         catch (IOException e)
         {
@@ -39,9 +43,20 @@ class Server
         }
     }
 
+    public static Server getServer ()
+    {
+        return srv;
+    }
+
+    public static void setServer (Server pSrv)
+    {
+        srv = pSrv;
+    }
+
     public static void main (String[] args)
     {
-        Server srv = new Server ();
-        srv.run ();
+        Server server = new Server ();
+        setServer (server);
+        server.run ();
     }
 }
