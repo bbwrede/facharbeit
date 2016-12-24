@@ -1,10 +1,12 @@
 import java.util.ArrayList;
 
+import java.util.ArrayList;
+
 class ConnectionManager
 {
     private ArrayList<ClientConnection> connections;
 
-    public ConnectionManager()
+    public ConnectionManager ()
     {
         connections = new ArrayList<ClientConnection> ();
     }
