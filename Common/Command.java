@@ -17,7 +17,7 @@ class Command
     }
 
     private Command.Type type;
-    private ArrayList<String> params;
+    private String[] params;
     private String uuid;
 
     public Command ()
@@ -34,7 +34,7 @@ class Command
         type = Type.valueOf (elems[0].toUpperCase ());
 
         // Restliche Elemente als Parameter einlesen
-        params = Arrays.asList (Arrays.copyOfRange (elems, 1, elems.length));
+        params = Arrays.copyOfRange (elems, 1, elems.length);
     }
 
     public Command (String cmd, String pUuid)
@@ -53,12 +53,12 @@ class Command
         type = pType;
     }
 
-    public void setParams (ArrayList<String> pParams)
+    public void setParams (String[] pParams)
     {
         params = pParams;
     }
 
-    public ArrayList<String> getParams ()
+    public String[] getParams ()
     {
         return params;
     }

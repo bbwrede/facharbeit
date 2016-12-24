@@ -2,6 +2,7 @@
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.lang.InterruptedException;
 
 public class Processor extends Thread
 {
@@ -14,11 +15,18 @@ public class Processor extends Thread
 
     public void run ()
     {
-        Command cmd;
+        Command cmd = new Command ();
 
         while (true)
         {
-            cmd = processingQueue.take ();   
+            try
+            {
+                cmd = processingQueue.take ();   
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace ();
+            }
 
             System.out.println (cmd.toString ());
         }

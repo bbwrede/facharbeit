@@ -1,5 +1,6 @@
 
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.io.IOException;
 import java.lang.Exception.*;
 
@@ -40,8 +41,20 @@ class Server
         // TODO: max. Verbindungen
         while (true)
         {
-            
+            try {
+                Socket s = srvs.accept ();
+                cm.add (new ClientConnection (s));
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace ();
+            }
         }
+    }
+
+    public Processor getProcessor ()
+    {
+        return proc;
     }
 
     public static Server getServer ()

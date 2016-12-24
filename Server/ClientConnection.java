@@ -1,46 +1,57 @@
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 import java.io.BufferedWriter;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.AbstractQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.Scanner;
+import java.lang.InterruptedException;
 
 class ClientConnection extends Thread
 {
     private Socket socket;
 
     private InputStream ins;
-    private Scanner scanner;
+    private Scanner dataIn;
 
     private OutputStream outs;
     private AbstractQueue<Command> outputQueue;
-    private BufferedWriter outputWriter; 
+    private DataOutputStream dataOut; 
 
     public ClientConnection (Socket pSocket)
     {
         socket = pSocket;
 
-        ins = socket.getInputStream ();
-        outs = socket.getOutputStream ();
+        try 
+        {
+            ins = socket.getInputStream ();
+            outs = socket.getOutputStream ();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace ();
+        }
 
-        scanner = new Scanner (ins);
-        scanner.useDelimiter ("%");
+        dataIn = new Scanner (ins);
+        dataIn.useDelimiter ("%");
 
-        outputQueue = new AbstractQueue<Command> ();
-        outputWriter = new BufferedWriter (outs);
+        outputQueue = new ConcurrentLinkedQueue<Command> ();
+        dataOut = new DataOutputStream (outs);
     }
 
     public void run ()
     {
         while (true)
         {
-            if (scanner.hasNextLine ())
+            if (dataIn.hasNextLine ())
             {
-                String line = scanner.nextLine ();
+                String line = dataIn.nextLine ();
                 line = line.trim ();
                 Command cmd = new Command (line);
                 Server.getServer ().getProcessor ().enqueue (cmd);
@@ -49,10 +60,24 @@ class ClientConnection extends Thread
             if (!outputQueue.isEmpty ())
             {
                 String cmd = outputQueue.remove ().toString ();
-                outputWriter.write (cmd, 0, cmd.length ());
+                try
+                {
+                    dataOut.writeUTF(cmd);
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace ();
+                }
             }
 
-            Thread.sleep (50);
+            try
+            {
+                Thread.sleep (50);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace ();
+            }
         }
     }
 }
