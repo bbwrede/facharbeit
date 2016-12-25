@@ -33,7 +33,15 @@ class ValidCommand implements Command
 
         // Erstes Element des Kommandos ist der Kommandotyp
         String[] elems = cmd.split("\\$");
-        type = Type.valueOf (elems[0].toUpperCase ());
+
+        try
+        {
+            type = Type.valueOf (elems[0].toUpperCase ());
+        }
+        catch (IllegalArgumentException e)
+        {
+            throw new ParsingException ();
+        }
 
         // UUID speichern
         try
