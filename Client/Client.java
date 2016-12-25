@@ -46,7 +46,7 @@ public class Client extends Thread
 		{ 
 			public void run() 
 			{ 
-				output.write("$heartbeat$"+uuid+"");
+				output.write("$heartbeat$"+uuid+"%");
 				output.flush();
 				System.out.println("30");
 			}
