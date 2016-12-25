@@ -1,4 +1,8 @@
 /bin/
+<<<<<<< HEAD
 *.class
 Server/*.class
 Client/*.class
+=======
+/.project
+>>>>>>> refs/heads/Fynn
