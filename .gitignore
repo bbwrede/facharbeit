@@ -3,6 +3,10 @@
 *.class
 Server/*.class
 Client/*.class
+<<<<<<< HEAD
 =======
 /.project
 >>>>>>> refs/heads/Fynn
+=======
+test/
+>>>>>>> branch 'master' of https://github.com/lukasmiddelberg/facharbeit.git

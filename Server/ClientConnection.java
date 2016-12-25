@@ -33,6 +33,7 @@ class ClientConnection extends Thread
             ins = socket.getInputStream ();
             outs = socket.getOutputStream ();
         }
+
         catch (IOException e)
         {
             e.printStackTrace ();
@@ -53,7 +54,15 @@ class ClientConnection extends Thread
             {
                 String line = dataIn.nextLine ();
                 line = line.trim ();
-                Command cmd = new Command (line);
+                Command cmd;
+                try
+                {
+                    cmd = new ValidCommand (line);
+                }
+                catch (Command.ParsingException e)
+                {
+                    cmd = new InvalidCommand (line);
+                }
                 Server.getServer ().getProcessor ().enqueue (cmd);
             }
 
