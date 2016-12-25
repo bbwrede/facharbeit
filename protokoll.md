@@ -18,11 +18,10 @@ Gemeinsam:
 
 *sendet eine Nachricht von Server zu Client oder umgekehrt.*
 
-    $msg$to$NACHRICHT$timestamp$uuid%
+    $msg$to$NACHRICHT$uuid%
 
 mit  
 *   `to`: Nickname des empfangenden Benutzers. Wenn Nachricht an alle gehen soll, `*`
-*   `timestamp`: Zeitstempel der Nachricht
 
 ---
 

@@ -15,7 +15,7 @@ public class Processor extends Thread
 
     public void run ()
     {
-        Command cmd = new Command ();
+        Command cmd = new ValidCommand ();
 
         while (true)
         {
