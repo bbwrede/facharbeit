@@ -33,6 +33,7 @@ class ClientConnection extends Thread
             ins = socket.getInputStream ();
             outs = socket.getOutputStream ();
         }
+
         catch (IOException e)
         {
             e.printStackTrace ();

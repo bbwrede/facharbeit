@@ -25,9 +25,24 @@ class Command
         uuid = UUID.randomUUID ().toString ();
     }
 
-    public Command (String cmd)
+    public Command (String cmd) // TODO: Throws CommandSyntaxException
     {
         this ();
+
+        String cmdOriginal = cmd;
+
+        cmd = cmd.trim ();
+        
+        if (!(cmd.startsWith ("$") && cmd.endsWith ("%")))
+        {
+            // TODO: throw CommandSyntaxException
+            System.out.println ("Beschissener Syntax.");
+        }
+
+        // $ vom anfang und % vom Ende entfernen
+        cmd = cmd.substring (1, cmd.length () - 1);
+
+        // TODO: Mehr als 1 Element funktioniert noch nicht
 
         // Erstes Element des Kommandos ist der Kommandotyp
         String[] elems = cmd.split("$");
@@ -35,12 +50,6 @@ class Command
 
         // Restliche Elemente als Parameter einlesen
         params = Arrays.copyOfRange (elems, 1, elems.length);
-    }
-
-    public Command (String cmd, String pUuid)
-    {
-        this (cmd);
-        uuid = pUuid;
     }
 
     public Command.Type getType ()

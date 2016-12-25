@@ -18,7 +18,8 @@ class Server
         proc.start ();
         cm = new ConnectionManager ();
 
-        try {
+        try
+        {
             srvs = new ServerSocket (5335);
         }
         catch (IOException e)
@@ -44,8 +45,10 @@ class Server
             try {
                 Socket s = srvs.accept ();
                 cm.add (new ClientConnection (s));
+                // TODO: Debug-mesages
+                System.out.println ("Neue Verbindung.");
             }
-            catch (IOException e)
+            catch (Exception e)
             {
                 e.printStackTrace ();
             }
