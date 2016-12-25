@@ -45,13 +45,26 @@ class Command
         // TODO: Mehr als 1 Element funktioniert noch nicht
 
         // Erstes Element des Kommandos ist der Kommandotyp
-        String[] elems = cmd.split("$");
+        String[] elems = cmd.split("\\$");
         type = Type.valueOf (elems[0].toUpperCase ());
 
         // Restliche Elemente als Parameter einlesen
         params = Arrays.copyOfRange (elems, 1, elems.length);
+    
     }
 
+    public String toString ()
+    {
+        String cmd = "";
+
+        cmd += "$";
+        cmd += type.toString ().toLowerCase ();
+        cmd += String.join ("$", params);
+        cmd += "%";
+
+        return cmd;
+    }
+    
     public Command.Type getType ()
     {
         return type;
