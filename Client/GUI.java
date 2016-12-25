@@ -15,6 +15,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JTextPane;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
 
 public class GUI extends JFrame
 {
@@ -32,11 +34,11 @@ public class GUI extends JFrame
 	private JButton btnExit;
 	private JPanel paneChat;
 	private JScrollPane spChat;
-	private JList listChat;
 	private JScrollPane spText;
 	private JTextPane tpText;
 	private JButton btnSend;
 	private JButton btnDelete;
+	private JTextArea taChat;
 
 
 	public GUI()
@@ -62,14 +64,15 @@ public class GUI extends JFrame
 		paneChat.setLayout(null);
 		
 		spChat = new JScrollPane();
-		spChat.setBounds(6, 6, 622, 283);
+		spChat.setBounds(6, 6, 622, 313);
 		paneChat.add(spChat);
 		
-		listChat = new JList();
-		spChat.setViewportView(listChat);
+		taChat = new JTextArea();
+		taChat.setEditable(false);
+		spChat.setViewportView(taChat);
 		
 		spText = new JScrollPane();
-		spText.setBounds(6, 301, 622, 84);
+		spText.setBounds(6, 330, 622, 55);
 		paneChat.add(spText);
 		
 		tpText = new JTextPane();
