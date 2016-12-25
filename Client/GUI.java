@@ -114,4 +114,9 @@ public class GUI extends JFrame
 	{
 		return pfPassword.getPassword();
 	}
+	
+	public JFrame getFrame()
+	{
+		return this;
+	}
 }
