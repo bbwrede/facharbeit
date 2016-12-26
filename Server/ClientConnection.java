@@ -50,9 +50,10 @@ class ClientConnection extends Thread
     {
         while (true)
         {
-            if (dataIn.hasNextLine ())
+            String line;
+            if ((line = dataIn.next ()) != null)
             {
-                String line = dataIn.nextLine ();
+                line = dataIn.nextLine ();
                 line = line.trim ();
                 Command cmd;
                 try
@@ -66,8 +67,11 @@ class ClientConnection extends Thread
                 Server.getServer ().getProcessor ().enqueue (cmd);
             }
 
+            System.out.println ("Dazwischen");
+
             if (!outputQueue.isEmpty ())
             {
+                System.out.println ("Schreibe");
                 String cmd = outputQueue.remove ().toString ();
                 try
                 {
@@ -88,5 +92,10 @@ class ClientConnection extends Thread
                 e.printStackTrace ();
             }
         }
+    }
+
+    public void addOutput (Command cmd)
+    {
+        outputQueue.add (cmd);
     }
 }
