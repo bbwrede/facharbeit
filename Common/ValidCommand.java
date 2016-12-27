@@ -13,6 +13,7 @@ class ValidCommand implements Command
     public ValidCommand ()
     {
         uuid = UUID.randomUUID ().toString ();
+        params = new String[0];
     }
 
     public ValidCommand (String cmd) throws ParsingException 
@@ -23,12 +24,12 @@ class ValidCommand implements Command
 
         cmd = cmd.trim ();
         
-        if (!(cmd.startsWith ("$") && cmd.endsWith ("%")))
+        if (!(cmd.startsWith ("%") && cmd.endsWith ("%")))
         {
             throw new ParsingException ();            
         }
 
-        // $ vom anfang und % vom Ende entfernen
+        // % vom Anfang und Ende entfernen
         cmd = cmd.substring (1, cmd.length () - 1);
 
         // Erstes Element des Kommandos ist der Kommandotyp
@@ -95,11 +96,14 @@ class ValidCommand implements Command
     {
         String cmd = "";
 
-        cmd += "$";
+        cmd += "%";
         cmd += type.toString ().toLowerCase ();
         cmd += "$";
-        cmd += String.join ("$", params);
-        cmd += "$";
+        if (params.length > 0)
+        {
+            cmd += String.join ("$", params);       
+            cmd += "$";
+        }
         cmd += uuid;
         cmd += "%";
 

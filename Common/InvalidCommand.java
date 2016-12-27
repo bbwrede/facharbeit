@@ -31,11 +31,11 @@ class InvalidCommand implements Command
     {
         if (uuid == null)
         {
-            return "$INVAL$NOUUID%";
+            return "%INVAL$NOUUID%";
         }
         else
         {
-            return "$INVAL$" + uuid + "%";
+            return "%INVAL$" + uuid + "%";
         }
     }
 }
