@@ -24,6 +24,8 @@ class ClientConnection extends Thread
     private AbstractQueue<Command> outputQueue;
     private DataOutputStream dataOut; 
 
+    private String nickname;
+
     public ClientConnection (Socket pSocket)
     {
         socket = pSocket;
@@ -44,15 +46,17 @@ class ClientConnection extends Thread
 
         outputQueue = new ConcurrentLinkedQueue<Command> ();
         dataOut = new DataOutputStream (outs);
+
+        nickname = null;
     }
 
     public void run ()
     {
         while (true)
         {
-            if (dataIn.hasNextLine ())
+            if (dataIn.hasNext ())
             {
-                String line = dataIn.nextLine ();
+                String line = dataIn.next ();
                 line = line.trim ();
                 Command cmd;
                 try
@@ -63,7 +67,7 @@ class ClientConnection extends Thread
                 {
                     cmd = new InvalidCommand (line);
                 }
-                Server.getServer ().getProcessor ().enqueue (cmd);
+                Server.getServer ().getProcessor ().enqueue (cmd, this);
             }
 
             if (!outputQueue.isEmpty ())
@@ -88,5 +92,15 @@ class ClientConnection extends Thread
                 e.printStackTrace ();
             }
         }
+    }
+
+    public void setNickname (String pNick)
+    {
+        nickname = pNick;
+    }
+
+    public String getNickname ()
+    {
+        return nickname;
     }
 }
