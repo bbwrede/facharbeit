@@ -1,12 +1,7 @@
-/bin/
-<<<<<<< HEAD
+bin/
 *.class
 Server/*.class
 Client/*.class
-<<<<<<< HEAD
-=======
-/.project
->>>>>>> refs/heads/Fynn
-=======
+.project/
 test/
->>>>>>> branch 'master' of https://github.com/lukasmiddelberg/facharbeit.git
+*.swp
