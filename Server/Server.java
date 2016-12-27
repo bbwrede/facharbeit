@@ -3,10 +3,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.io.IOException;
 import java.lang.Exception.*;
+import java.time.LocalTime;
 
 class Server
 {
     private static Server srv;
+    private static boolean debug;
     
     private ServerSocket srvs;
     private ConnectionManager cm;
@@ -14,6 +16,8 @@ class Server
     
     public Server ()
     {
+        debug = false;
+        
         proc = new Processor ();
         proc.start ();
         cm = new ConnectionManager ();
@@ -39,14 +43,17 @@ class Server
      */
     public void run ()
     {
+        Server.consoleMsg ("Server gestartet. Moin.");
+        Server.debugMsg ("Debug-Modus aktiviert.");
+
         // TODO: max. Verbindungen
         while (true)
         {
             try {
                 Socket s = srvs.accept ();
                 cm.add (new ClientConnection (s));
-                // TODO: Debug-mesages
-                System.out.println ("Neue Verbindung.");
+                Server.debugMsg (String.format ("Neue Verbindung aufgebaut:  %s",
+                                                s.getRemoteSocketAddress ().toString ()));
             }
             catch (Exception e)
             {
@@ -70,9 +77,43 @@ class Server
         srv = pSrv;
     }
 
+    public static void setDebug (boolean pDebug)
+    {
+        debug = pDebug;
+    }
+
+    public static boolean getDebug ()
+    {
+        return debug;
+    }
+
+    public static synchronized void debugMsg (String msg)
+    {
+        if (debug)
+        {
+            consoleMsg (msg); 
+        }
+    }
+        
+    public static synchronized void consoleMsg (String msg)
+    {
+        System.out.println (String.format ("[  %s  ]   %s",
+                            LocalTime.now ().toString (),
+                            msg));
+    }
+
     public static void main (String[] args)
     {
         Server server = new Server ();
+        
+        for (String arg : args)
+        {
+            if (arg.equals ("debug"))
+            {
+                Server.setDebug (true);
+            }
+        }
+
         setServer (server);
         server.run ();
     }
