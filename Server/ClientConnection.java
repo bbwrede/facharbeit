@@ -4,95 +4,130 @@ import java.io.IOException;
 import java.net.Socket;
 
 import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 import java.util.AbstractQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.Scanner;
 import java.lang.InterruptedException;
+import java.lang.Runnable;
 
-class ClientConnection extends Thread
+class ClientConnection
 {
     private Socket socket;
-
     private InputStream ins;
-    private Scanner dataIn;
-
     private OutputStream outs;
-    private AbstractQueue<Command> outputQueue;
-    private DataOutputStream dataOut; 
+
+    private Thread threadIn;
+    private Thread threadOut;
+
+    private LinkedBlockingQueue<Command> outputQueue;
 
     private String nickname;
 
-    public ClientConnection (Socket pSocket)
+    class Input implements Runnable
     {
-        socket = pSocket;
+        private Scanner scanner;
 
-        try 
+        public Input ()
         {
-            ins = socket.getInputStream ();
-            outs = socket.getOutputStream ();
+            scanner = new Scanner (ins);
         }
 
-        catch (IOException e)
+        public void run ()
         {
-            e.printStackTrace ();
+            while (true)
+            {
+                if (scanner.hasNextLine ())
+                {
+                    String line = scanner.nextLine ();
+                    System.out.println (line);
+                    line = line.trim ();
+                    Command cmd;
+                    try
+                    {
+                        cmd = new ValidCommand (line);
+                    }
+                    catch (Command.ParsingException e)
+                    {
+                        cmd = new InvalidCommand (line);
+                    }
+                    Server.getServer ().getProcessor ().enqueue (cmd, ClientConnection.this);
+                }
+            }
         }
-
-        dataIn = new Scanner (ins);
-        dataIn.useDelimiter ("%");
-
-        outputQueue = new ConcurrentLinkedQueue<Command> ();
-        dataOut = new DataOutputStream (outs);
-
-        nickname = null;
     }
 
-    public void run ()
+    class Output implements Runnable
     {
-        while (true)
-        {
-            if (dataIn.hasNext ())
-            {
-                String line = dataIn.next ();
-                line = line.trim ();
-                Command cmd;
-                try
-                {
-                    cmd = new ValidCommand (line);
-                }
-                catch (Command.ParsingException e)
-                {
-                    cmd = new InvalidCommand (line);
-                }
-                Server.getServer ().getProcessor ().enqueue (cmd, this);
-            }
+        private DataOutputStream writer;
 
-            if (!outputQueue.isEmpty ())
+        private ClientConnection cc;
+
+        public Output ()
+        {
+            writer = new DataOutputStream (outs);
+        }
+
+        public void run ()
+        {
+            while (true)
             {
-                String cmd = outputQueue.remove ().toString ();
                 try
                 {
-                    dataOut.writeUTF(cmd);
+                    Command cmd = outputQueue.take ();
+                    writer.writeChars (cmd.toString ());
                 }
                 catch (IOException e)
                 {
                     e.printStackTrace ();
                 }
-            }
-
-            try
-            {
-                Thread.sleep (50);
-            }
-            catch (InterruptedException e)
-            {
-                e.printStackTrace ();
+                catch (InterruptedException e)
+                {
+                    e.printStackTrace ();
+                }
             }
         }
     }
+
+    public ClientConnection (Socket pSocket)
+    {
+        socket = pSocket;
+
+        try
+        {
+            ins = socket.getInputStream ();
+            outs = socket.getOutputStream ();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace ();
+        }
+
+        threadIn = new Thread (new Input ());
+        threadOut = new Thread (new Output ());
+
+        outputQueue = new LinkedBlockingQueue<Command> ();
+
+        nickname = null;
+    }
+
+    public void start ()
+    {
+        threadIn.start ();
+        threadOut.start ();
+    }
+
+    public void stop ()
+    {
+        threadIn.stop ();
+        threadOut.stop ();
+    }
+
 
     public void setNickname (String pNick)
     {
@@ -103,4 +138,17 @@ class ClientConnection extends Thread
     {
         return nickname;
     }
+    
+    public void sendCmd (Command cmd)
+    {
+        try
+        {
+            outputQueue.put (cmd);
+        } 
+        catch (InterruptedException e)
+        {
+            e.printStackTrace ();
+        }
+    }
+
 }

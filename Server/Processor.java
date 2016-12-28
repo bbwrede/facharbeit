@@ -26,23 +26,36 @@ public class Processor extends Thread
             {
                 cmd = processingQueue.take ();
                 sender = senderQueue.take ();
+
+                if (sender.getNickname () != null)
+                {
+                    Server.debugMsg ("Kommando gesendet:");                          
+                    Server.debugMsg (String.format ("   %s  -  %s",
+                                     sender.getNickname (),
+                                     cmd.toString ()));
+                }
+                else
+                {
+                    //TODO: Error an Client zurückgeben weil noch nicht registriert.
+                }
+
+                // FIXME: Einfacher PINGBACK
+                //
+
+                if (cmd == null)
+                {
+                    System.out.println ("Ist null.");
+                }
+
+                sender.sendCmd (cmd);
             }
             catch (InterruptedException e)
             {
                 e.printStackTrace ();
             }
 
-            if (sender.getNickname () != null)
-            {
-                Server.debugMsg ("Kommando gesendet:");                          
-                Server.debugMsg (String.format ("   %s  -  %s",
-                                 sender.getNickname (),
-                                 cmd.toString ()));
-            }
-            else
-            {
-                //TODO: Error an Client zurückgeben weil noch nicht registriert.
-            }
+            cmd = null;
+            sender = null;
         }
     }
 
