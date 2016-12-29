@@ -36,7 +36,7 @@ public class Client extends Thread
 		reader = new Scanner(socket.getInputStream());
 		
 		this.start();
-		System.out.println("Test");
+		
 	}
 	
 	public void heartbeat()
@@ -46,7 +46,7 @@ public class Client extends Thread
 		{ 
 			public void run() 
 			{ 
-				output.write("$heartbeat$"+uuid+"%");
+				output.write("%heartbeat$"+uuid+"%");
 				output.flush();
 				System.out.println("30");
 			}
@@ -58,11 +58,23 @@ public class Client extends Thread
 		heartbeat();
 		while (true)
 		{	
-			while (reader.hasNext() == true)
-		    {
-		    	String cmd = "";
-		    	cmd += reader.next();		    
-		    }
+			
+			if (reader.hasNextLine())
+			{
+				String cmd = reader.nextLine();
+				System.out.println(cmd);
+			}
+			
+			System.out.println("efsefsef");
+			
+			try
+            {
+                Thread.sleep (50);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace ();
+            }
 		}
 	}
 }
