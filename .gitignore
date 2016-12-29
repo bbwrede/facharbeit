@@ -5,3 +5,4 @@ Client/*.class
 .project/
 test/
 *.swp
+/.project
