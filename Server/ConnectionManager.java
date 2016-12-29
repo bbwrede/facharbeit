@@ -1,8 +1,9 @@
 import java.util.ArrayList;
+import java.lang.Iterable;
+import java.util.Iterator;
 
-import java.util.ArrayList;
 
-class ConnectionManager
+class ConnectionManager implements Iterable<ClientConnection>
 {
     private ArrayList<ClientConnection> connections;
 
@@ -31,5 +32,23 @@ class ConnectionManager
     {
         connections.remove (conn);
         conn.stop ();
+    }
+
+    public ClientConnection get (String nickname)
+    {
+        for (ClientConnection conn : connections)
+        {
+            if (conn.getNickname ().equals (nickname))
+            {
+                return conn;
+            }
+        }
+
+        return null;
+    }
+
+    public Iterator<ClientConnection> iterator ()
+    {
+        return connections.iterator ();
     }
 }
