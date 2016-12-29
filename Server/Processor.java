@@ -22,10 +22,28 @@ public class Processor extends Thread
 
         while (true)
         {
+            System.out.println ("Hier.");
+
             try
             {
                 cmd = processingQueue.take ();
                 sender = senderQueue.take ();
+
+                switch (cmd.getType ())
+                {
+                    case REG:
+                        if (sender.getNickname () != null)
+                        {
+                            // TODO: rejecten
+                        }
+                        else
+                        {
+                            sender.setNickname (((ValidCommand) cmd).getParams ()[0]);
+                        }
+                        Server.debugMsg (String.format ("Client hat sich registriert:   %s",
+                                                         ((ValidCommand) cmd).getParams ()[0]));
+                        
+                } 
 
                 if (sender.getNickname () != null)
                 {
@@ -41,12 +59,6 @@ public class Processor extends Thread
 
                 // FIXME: Einfacher PINGBACK
                 //
-
-                if (cmd == null)
-                {
-                    System.out.println ("Ist null.");
-                }
-
                 sender.sendCmd (cmd);
             }
             catch (InterruptedException e)
