@@ -29,37 +29,47 @@ public class Processor extends Thread
                 cmd = processingQueue.take ();
                 sender = senderQueue.take ();
 
-                switch (cmd.getType ())
+                if (cmd instanceof ValidCommand)
                 {
-                    case REG:
-                        if (sender.getNickname () != null)
-                        {
-                            // TODO: rejecten
-                        }
-                        else
-                        {
-                            sender.setNickname (((ValidCommand) cmd).getParams ()[0]);
-                        }
-                        Server.debugMsg (String.format ("Client hat sich registriert:   %s",
-                                                         ((ValidCommand) cmd).getParams ()[0]));
-                        
-                } 
+                    ValidCommand vcmd = (ValidCommand) cmd;
 
-                if (sender.getNickname () != null)
-                {
-                    Server.debugMsg ("Kommando gesendet:");                          
-                    Server.debugMsg (String.format ("   %s  -  %s",
-                                     sender.getNickname (),
-                                     cmd.toString ()));
-                }
-                else
-                {
-                    //TODO: Error an Client zurückgeben weil noch nicht registriert.
+                    switch (vcmd.getType ())
+                    {
+                        case REG:
+                            if (sender.getNickname () != null)
+                            {
+                                // TODO: rejecten
+                            }
+                            else
+                            {
+                                sender.setNickname (vcmd.getParams ()[0]);
+                            }       
+                            Server.debugMsg (String.format ("Client hat sich registriert:   %s",
+                                                            (vcmd.getParams ()[0]));
+                            break;
+
+                        case MSG:
+                            // params[0] ist addressat, params[1] ist die Nachricht
+                            if 
+                            
+                    } 
+
+                    if (sender.getNickname () != null)
+                    {
+                        Server.debugMsg ("Kommando gesendet:");                          
+                        Server.debugMsg (String.format ("   %s  -  %s",
+                                         sender.getNickname (),
+                                         cmd.toString ()));
+                    }
+                    else
+                    {
+                        //TODO: Error an Client zurückgeben weil noch nicht registriert.
+                    }
                 }
 
-                // FIXME: Einfacher PINGBACK
-                //
-                sender.sendCmd (cmd);
+                cmd = new ValidCommand ();
+                cmd.setType (Command.Type.GETSTAT);
+                sender.sendMsg (cmd);
             }
             catch (InterruptedException e)
             {
