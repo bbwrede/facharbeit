@@ -35,6 +35,14 @@ public class Client extends Thread
 		output = new PrintWriter(socket.getOutputStream());
 		reader = new Scanner(socket.getInputStream());
 		
+		ValidCommand cmd = new ValidCommand();
+		cmd.setType(Command.Type.REG);
+		String[] param = {username};
+		cmd.setParams(param);
+		
+		output.println(cmd.toString());
+		output.flush();
+		
 		this.start();
 		
 	}
@@ -46,11 +54,10 @@ public class Client extends Thread
 		{ 
 			public void run() 
 			{ 
-				output.write("%heartbeat$"+uuid+"%");
+				output.println("%heartbeat$"+uuid+"%");
 				output.flush();
-				System.out.println("30");
 			}
-		},  0 ,30000);
+		},  0 ,3000);
 	}
 	
 	public void run()
@@ -64,8 +71,6 @@ public class Client extends Thread
 				String cmd = reader.nextLine();
 				System.out.println(cmd);
 			}
-			
-			System.out.println("efsefsef");
 			
 			try
             {
