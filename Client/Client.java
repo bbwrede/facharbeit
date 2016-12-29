@@ -35,6 +35,14 @@ public class Client extends Thread
 		output = new PrintWriter(socket.getOutputStream());
 		reader = new Scanner(socket.getInputStream());
 		
+		ValidCommand cmd = new ValidCommand();
+		cmd.setType(Command.Type.REG);
+		String[] param = {username};
+		cmd.setParams(param);
+		
+		output.println(cmd.toString());
+		output.flush();
+		
 		this.start();
 		
 	}
@@ -46,7 +54,10 @@ public class Client extends Thread
 		{ 
 			public void run() 
 			{ 
-				output.write("%heartbeat$"+uuid+"%");
+				ValidCommand cmd = new ValidCommand();
+				cmd.setType(Command.Type.HEARTBEAT);
+
+				output.println(cmd.toString());
 				output.flush();
 				System.out.println("30");
 			}
@@ -65,8 +76,6 @@ public class Client extends Thread
 				System.out.println(cmd);
 			}
 			
-			System.out.println("efsefsef");
-			
 			try
             {
                 Thread.sleep (50);
@@ -76,6 +85,17 @@ public class Client extends Thread
                 e.printStackTrace ();
             }
 		}
+	}
+	
+	public void sendMessage(String pMessage)
+	{
+		ValidCommand cmd = new ValidCommand();
+		cmd.setType(Command.Type.MSG);
+		String[] param = {"*",pMessage};
+		cmd.setParams(param);
+		
+		output.println(cmd.toString());
+		output.flush();
 	}
 }
 
