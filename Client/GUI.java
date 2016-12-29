@@ -20,12 +20,13 @@ import javax.swing.ListSelectionModel;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.CardLayout;
 
 public class GUI extends JFrame
 {
 
 	private JPanel contentPane;
-	private JPanel paneConnect;
+	private JPanel panelConnect;
 	private JLabel lblChatroom;
 	private JPanel panel_1;
 	private JTextField tfUsername;
@@ -35,17 +36,18 @@ public class GUI extends JFrame
 	private JSeparator separator;
 	private JLabel lblUsername;
 	private JButton btnExit;
-	private JPanel paneChat;
+	private JPanel panelChat;
 	private JScrollPane spChat;
 	private JScrollPane spText;
 	private JTextPane tpText;
 	private JButton btnSend;
 	private JButton btnDelete;
-	private JPanel panel;
+	private JTextArea taChat;
 
 
 	public GUI()
 	{
+		setResizable(false);
 		try 
 		{
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -59,23 +61,22 @@ public class GUI extends JFrame
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		contentPane.setLayout(new CardLayout(0, 0));
 		
-		paneConnect = new JPanel();
-		paneConnect.setBounds(0, 0, 634, 421);
-		contentPane.add(paneConnect);
-		paneConnect.setLayout(null);
+		panelConnect = new JPanel();
+		contentPane.add(panelConnect, "name_888544057830218");
+		panelConnect.setLayout(null);
 		
 		lblChatroom = new JLabel("Chatroom");
 		lblChatroom.setFont(new Font("Tahoma", Font.PLAIN, 24));
 		lblChatroom.setHorizontalAlignment(SwingConstants.CENTER);
 		lblChatroom.setBounds(257, 11, 120, 56);
-		paneConnect.add(lblChatroom);
+		panelConnect.add(lblChatroom);
 		
 		panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_1.setBounds(196, 83, 241, 255);
-		paneConnect.add(panel_1);
+		panelConnect.add(panel_1);
 		panel_1.setLayout(null);
 		tfUsername = new JTextField();
 		tfUsername.setBounds(39, 44, 162, 28);
@@ -102,33 +103,26 @@ public class GUI extends JFrame
 		
 		btnConnect = new JButton("Verbinden");
 		btnConnect.setBounds(196, 350, 137, 28);
-		paneConnect.add(btnConnect);
+		panelConnect.add(btnConnect);
 		
 		btnExit = new JButton("Beenden");
 		btnExit.setBounds(345, 350, 92, 28);
-		paneConnect.add(btnExit);
+		panelConnect.add(btnExit);
 		
-		paneChat = new JPanel();
-		paneChat.setBounds(0, 0, 634, 421);
-		contentPane.add(paneChat);
-		paneChat.setLayout(null);
+		panelChat = new JPanel();
+		contentPane.add(panelChat, "name_888544075012192");
+		panelChat.setLayout(null);
 		
 		spChat = new JScrollPane();
 		spChat.setBounds(6, 6, 622, 313);
-		paneChat.add(spChat);
+		panelChat.add(spChat);
 		
-		panel = new JPanel();
-		spChat.setViewportView(panel);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{324, 260, 0};
-		gbl_panel.rowHeights = new int[]{50, 50, 50, 50, 50, 50, 50, 50, 50};
-		gbl_panel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_panel);
+		taChat = new JTextArea();
+		spChat.setViewportView(taChat);
 		
 		spText = new JScrollPane();
 		spText.setBounds(6, 330, 622, 55);
-		paneChat.add(spText);
+		panelChat.add(spText);
 		
 		tpText = new JTextPane();
 		tpText.setText("Hier die Nachricht eingeben");
@@ -136,11 +130,11 @@ public class GUI extends JFrame
 		
 		btnSend = new JButton("Absenden");
 		btnSend.setBounds(538, 387, 90, 28);
-		paneChat.add(btnSend);
+		panelChat.add(btnSend);
 		
-		btnDelete = new JButton("Löschen");
+		btnDelete = new JButton("L\u00F6schen");
 		btnDelete.setBounds(436, 387, 90, 28);
-		paneChat.add(btnDelete);
+		panelChat.add(btnDelete);
 		
 		setVisible(true);
 	}
@@ -149,8 +143,16 @@ public class GUI extends JFrame
 	{
 		btnConnect.addActionListener(l);
 		btnConnect.setActionCommand("Connect");
+		btnSend.addActionListener(l);
+		btnSend.setActionCommand("Send");
 		btnExit.addActionListener(l);
 		btnExit.setActionCommand("Exit");
+	}
+	
+	public void showChat()
+	{
+		panelConnect.setVisible(false);
+		panelChat.setVisible(true);
 	}
 	
 	public String getHostname()
@@ -171,5 +173,10 @@ public class GUI extends JFrame
 	public JFrame getFrame()
 	{
 		return this;
+	}
+	
+	public String getMessage()
+	{
+		return tpText.getText();
 	}
 }

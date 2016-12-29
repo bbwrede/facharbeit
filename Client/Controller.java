@@ -26,6 +26,7 @@ public class Controller implements ActionListener
 			try
 			{
 				client = new Client(gui.getUsername(),gui.getHostname());
+				gui.showChat();
 			} catch (IOException e1)
 			{
 				JOptionPane.showMessageDialog(gui.getFrame(),
@@ -37,6 +38,11 @@ public class Controller implements ActionListener
 		if (cmd.equals("Exit"))
 		{
 			System.exit(0);
+		}
+		
+		if (cmd.equals("Send"))
+		{
+			client.sendMessage(gui.getMessage());
 		}
 		
 	}

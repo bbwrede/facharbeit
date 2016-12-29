@@ -54,10 +54,14 @@ public class Client extends Thread
 		{ 
 			public void run() 
 			{ 
-				output.println("%heartbeat$"+uuid+"%");
+				ValidCommand cmd = new ValidCommand();
+				cmd.setType(Command.Type.HEARTBEAT);
+
+				output.println(cmd.toString());
 				output.flush();
+				System.out.println("30");
 			}
-		},  0 ,3000);
+		},  0 ,30000);
 	}
 	
 	public void run()
@@ -81,6 +85,17 @@ public class Client extends Thread
                 e.printStackTrace ();
             }
 		}
+	}
+	
+	public void sendMessage(String pMessage)
+	{
+		ValidCommand cmd = new ValidCommand();
+		cmd.setType(Command.Type.MSG);
+		String[] param = {"*",pMessage};
+		cmd.setParams(param);
+		
+		output.println(cmd.toString());
+		output.flush();
 	}
 }
 
