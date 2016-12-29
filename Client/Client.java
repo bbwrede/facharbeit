@@ -1,64 +1,82 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
-public class Client extends Thread implements ActionListener
+import com.sun.corba.se.spi.orbutil.fsm.Input;
+
+public class Client extends Thread
 {
-	private Socket socket = new Socket();
+	private Socket socket = null;
 	private int port;
 	private InetAddress ip;
 	private String username;
 	private UUID uuid;
-	private GUI gui;
 	private PrintWriter output;
 	private Scanner reader;
 
-	public Client()
+	public Client(String pUsername, String pIp) throws UnknownHostException, IOException
 	{
 		uuid = UUID.randomUUID();
 		port = 5335;
-		gui = new GUI();
-		gui.setActionListener(this);
+		ip = ip.getByName(pIp);
+		username = pUsername;
+		connect();
 	}
 	
-	public String getUsername()
+	public void connect() throws UnknownHostException, IOException
 	{
-		return username;
-	}
-
-	public void setUsername(String username)
-	{
-		this.username = username;
-	}
-
-	public static void main(String[] args)
-	{
-		new Client();
+		socket = new Socket(ip, port);
+		output = new PrintWriter(socket.getOutputStream());
+		reader = new Scanner(socket.getInputStream());
+		
+		this.start();
+		
 	}
 	
-
-	@Override
-	public void actionPerformed(ActionEvent e)
+	public void heartbeat()
 	{
-		String cmd = e.getActionCommand();
-		
-		if (cmd.equals("Connect"))
-		{
-			System.out.println("Connect");
-		}
-		
-		if (cmd.equals("Exit"))
-		{
-			System.exit(0);
-		}
-		
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() 
+		{ 
+			public void run() 
+			{ 
+				output.write("%heartbeat$"+uuid+"%");
+				output.flush();
+				System.out.println("30");
+			}
+		},  0 ,30000);
 	}
-
+	
+	public void run()
+	{
+		heartbeat();
+		while (true)
+		{	
+			
+			if (reader.hasNextLine())
+			{
+				String cmd = reader.nextLine();
+				System.out.println(cmd);
+			}
+			
+			System.out.println("efsefsef");
+			
+			try
+            {
+                Thread.sleep (50);
+            }
+            catch (InterruptedException e)
+            {
+                e.printStackTrace ();
+            }
+		}
+	}
 }
 
 
