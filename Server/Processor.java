@@ -27,6 +27,7 @@ public class Processor extends Thread
             try
             {
                 cmd = processingQueue.take ();
+                System.out.println (cmd.toString ());
                 sender = senderQueue.take ();
 
                 if (cmd instanceof ValidCommand)
@@ -45,12 +46,12 @@ public class Processor extends Thread
                                 sender.setNickname (vcmd.getParams ()[0]);
                             }       
                             Server.debugMsg (String.format ("Client hat sich registriert:   %s",
-                                                            (vcmd.getParams ()[0]));
+                                                            (vcmd.getParams ()[0])));
                             break;
 
                         case MSG:
                             // params[0] ist addressat, params[1] ist die Nachricht
-                            if 
+                            break; 
                             
                     } 
 
@@ -67,9 +68,7 @@ public class Processor extends Thread
                     }
                 }
 
-                cmd = new ValidCommand ();
-                cmd.setType (Command.Type.GETSTAT);
-                sender.sendMsg (cmd);
+                sender.sendCmd (cmd);
             }
             catch (InterruptedException e)
             {

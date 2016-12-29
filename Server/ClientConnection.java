@@ -46,8 +46,13 @@ class ClientConnection
                 if (scanner.hasNextLine ())
                 {
                     String line = scanner.nextLine ();
-                    // TODO: angeben welcher client
-                    Server.debugMsg (String.format ("Client hat gesendet:   %s", line));
+
+                    // Wenn in Zeile kein Command enthalten ist, überspringen.
+                    if (!line.matches ("[^%]*%[^%]+%[^%]*"))
+                    {
+                        continue;
+                    }
+
                     line = line.trim ();
                     Command cmd;
                     try
@@ -82,7 +87,7 @@ class ClientConnection
                 try
                 {
                     Command cmd = outputQueue.take ();
-                    writer.println (cmd.toString ());
+                    writer.print (cmd.toString ());
                     writer.flush ();
                 }
                 catch (InterruptedException e)
