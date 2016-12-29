@@ -107,6 +107,8 @@ class ValidCommand implements Command
         cmd += uuid;
         cmd += "%";
 
+        cmd += "\n";
+
         return cmd;
     }
 
