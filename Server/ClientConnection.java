@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.io.BufferedWriter;
 import java.io.BufferedReader;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.DataOutputStream;
@@ -45,7 +46,8 @@ class ClientConnection
                 if (scanner.hasNextLine ())
                 {
                     String line = scanner.nextLine ();
-                    System.out.println (line);
+                    // TODO: angeben welcher client
+                    Server.debugMsg (String.format ("Client hat gesendet:   %s", line));
                     line = line.trim ();
                     Command cmd;
                     try
@@ -64,13 +66,13 @@ class ClientConnection
 
     class Output implements Runnable
     {
-        private DataOutputStream writer;
+        private PrintWriter writer;
 
         private ClientConnection cc;
 
         public Output ()
         {
-            writer = new DataOutputStream (outs);
+            writer = new PrintWriter (outs, true);
         }
 
         public void run ()
@@ -80,11 +82,8 @@ class ClientConnection
                 try
                 {
                     Command cmd = outputQueue.take ();
-                    writer.writeChars (cmd.toString ());
-                }
-                catch (IOException e)
-                {
-                    e.printStackTrace ();
+                    writer.println (cmd.toString ());
+                    writer.flush ();
                 }
                 catch (InterruptedException e)
                 {
@@ -150,5 +149,4 @@ class ClientConnection
             e.printStackTrace ();
         }
     }
-
 }
