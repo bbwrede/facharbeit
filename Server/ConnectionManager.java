@@ -2,7 +2,9 @@ import java.util.ArrayList;
 import java.lang.Iterable;
 import java.util.Iterator;
 
-
+/**
+ * Verwaltet alle {@link ClientConnection}s
+ */
 class ConnectionManager implements Iterable<ClientConnection>
 {
     private ArrayList<ClientConnection> connections;
@@ -14,7 +16,7 @@ class ConnectionManager implements Iterable<ClientConnection>
 
     /**
      * Fügt eine ClientConnection hinzu und startet die Ausführung
-     * ihres Threads.
+     * ihrer Threads.
      * @param conn Die hinzuzufügende ClientConnection
      */
     public void add (ClientConnection conn)
@@ -24,7 +26,7 @@ class ConnectionManager implements Iterable<ClientConnection>
     }
 
     /**
-     * Entfernt eine ClientConnection und stoppt die Ausführung ihres
+     * Entfernt eine ClientConnection und stoppt die Ausführung ihrer
      * Threads.
      * @param conn Die zu entfernende ClientConnection
      */
@@ -34,6 +36,9 @@ class ConnectionManager implements Iterable<ClientConnection>
         conn.stop ();
     }
 
+    /**
+     * @return Eine ClientConnection mit dem Nickname nickname.
+     */
     public ClientConnection get (String nickname)
     {
         for (ClientConnection conn : connections)

@@ -3,6 +3,10 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.lang.InterruptedException;
 
+
+/**
+ * Verarbeitet eingehende {@link Command}s und generiert passende Ausgaben.
+ */
 public class Processor extends Thread
 {
     // Queues hängen zusammen; jedes Command korrespondiert zu einem Absender.
@@ -115,6 +119,12 @@ public class Processor extends Thread
         }
     }
 
+    /**
+     * Füge ein {@link Command} in die Verarbeitungsschlange ein.
+     *
+     * @param cmd Das zu verarbeitende Command
+     * @param sender Der Absender des Commands
+     */
     public void enqueue (Command cmd, ClientConnection sender)
     {
         processingQueue.add (cmd);

@@ -17,6 +17,13 @@ import java.util.Scanner;
 import java.lang.InterruptedException;
 import java.lang.Runnable;
 
+
+/**
+ * Diese Klasse repräsentiert einen Client und seine Verbindung zum Server.
+ * 
+ * <p>Ihre Aufgabe ist es, eingehende Kommandos zur Weiterverarbeitung anzunehmen und entsprechende
+ * Antworten an den Client weiterzuleiten.
+ */
 class ClientConnection
 {
     private Socket socket;
@@ -30,6 +37,9 @@ class ClientConnection
 
     private String nickname;
 
+    /**
+     * Zuständig für eingehende Kommandos.
+     */
     class Input implements Runnable
     {
         private Scanner scanner;
@@ -69,6 +79,9 @@ class ClientConnection
         }
     }
 
+    /**
+     * Zuständig für zum Client ausgehende Kommandos.
+     */
     class Output implements Runnable
     {
         private PrintWriter writer;
@@ -120,29 +133,46 @@ class ClientConnection
         nickname = null;
     }
 
+    /**
+     * Fange an, mit dem Client zu kommunizieren.
+     */
     public void start ()
     {
         threadIn.start ();
         threadOut.start ();
     }
 
+    /**
+     * Höre auf, mit dem Client zu kommunizieren.
+     */
     public void stop ()
     {
         threadIn.stop ();
         threadOut.stop ();
     }
 
-
+    /**
+     * Setze den Nicknamen des Clients.
+     */
     public void setNickname (String pNick)
     {
         nickname = pNick;
     }
 
+    /**
+     * @return Der Nickname des Clients.
+     */
     public String getNickname ()
     {
         return nickname;
     }
     
+    /**
+     * Übermittle dem Client ein Kommando.
+     *
+     * <p>Diese Methode blockiert nicht, sondern fügt das Kommando stattdessen in eine
+     * Queue ein, sodass es von {@link ClientConnection.Output} verarbeitet wird.
+     */
     public void sendCmd (Command cmd)
     {
         try

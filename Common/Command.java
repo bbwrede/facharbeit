@@ -1,6 +1,17 @@
 
+
+/**
+ * Repräsentiert ein Kommando das vom Server zum Client und umgekehrt gesendet wird.
+ */
 interface Command
 {
+    /**
+     * Tritt auf wenn beim Parsen eines Strings in ein {@link ValidCommand} ein
+     * Fehler auftritt.
+     *
+     * <p>Wenn aufgetreten, sollte statt eines {@link ValidCommands} ein 
+     * {@link InvalidCommand} aus diesem String erstellt werden.
+     */
     public class ParsingException extends Exception
     {
         public ParsingException () {  }
@@ -21,6 +32,9 @@ interface Command
         }
     }    
 
+    /**
+     * Repräsentiert den Typ eines Commands, gemäß dem Protokoll zu finden in protokoll.md
+     */
     public enum Type {
         MSG,
         RSP, 
@@ -31,5 +45,8 @@ interface Command
         STAT;
     }
 
+    /**
+     * @return die UUID eines Commands.
+     */
     public abstract String getUUID ();
 }

@@ -4,18 +4,35 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.IllegalArgumentException;
 
+
+/**
+ * Repräsentiert einen Kommando-String mit validem Syntax.
+ */
 class ValidCommand implements Command
 {
     private Command.Type type;
     private String[] params;
     private String uuid;
 
+
+    /**
+     * Erstelle ein neues, noch leeres Kommando.
+     */
     public ValidCommand ()
     {
         uuid = UUID.randomUUID ().toString ();
         params = new String[0];
     }
 
+    /**
+     * Erstelle ein neues Kommando aus dem übergebenen String cmd.
+     *
+     * <p>Hat cmd einen invaliden Syntax, so wird {@link Command.ParsingException}
+     * gethrowt. In diesem Fall sollte statt eines ValidCommands ein
+     * {@link InvalidCommand} erstellt werden.
+     *
+     * @param cmd das Kommando aus dem ein ValidCommand erstellt werden soll.
+     */
     public ValidCommand (String cmd) throws ParsingException 
     {
         this ();
@@ -111,31 +128,40 @@ class ValidCommand implements Command
 
         return cmd;
     }
-
-    public boolean isValidNickname (String nick)
-    {
-        // TODO:
-        // - implementieren
-        // - in COmmand verschieben
-        // - static machen
-        return true;
-    }
     
+    /**
+     * @return Den Typ dieses Commands gemäß protokoll.md
+     */
     public Command.Type getType ()
     {
         return type;
     }
 
+    /**
+     * Setze den Typ dieses Commands gemäß protokoll.md
+     */
     public void setType (Type pType)
     {
         type = pType;
     }
 
+    /**
+     * Setze die Parameter des Kommandos, ausgenommen die UUID.
+     *
+     * <p>Wichtig: Es wird keine Prüfung auf Validität der Parameter vorgenommen.
+     *
+     * @param pParams Ein String-Array aller Parameter in der Reihenfolge spezifiziert
+     * in protokoll.md
+     */
     public void setParams (String[] pParams)
     {
         params = pParams;
     }
 
+    /**
+     * @return Einen String-Array aller Parameter des Kommandos in der Reihenfolge
+     * spezifiziert in protokoll.md
+     */
     public String[] getParams ()
     {
         return params;

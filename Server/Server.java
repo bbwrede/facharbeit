@@ -32,6 +32,9 @@ class Server
         }
     }
 
+    /**
+     * @return Den ConnectionManager des Servers
+     */
     public ConnectionManager getConnectionManager ()
     {
         return cm;
@@ -62,31 +65,57 @@ class Server
         }
     }
 
+    /**
+     * @return Den Processor des Servers.
+     */
     public Processor getProcessor ()
     {
         return proc;
     }
 
+    /**
+     * @return Die Serverinstanz
+     */
     public static Server getServer ()
     {
         return srv;
     }
 
+    /**
+     * Setze die laufende Serverinstanz, sodass Objekte, die Server nicht kennen,
+     * dennoch per {@link Server.getServer} auf sie zugreifen können.
+     */
     public static void setServer (Server pSrv)
     {
         srv = pSrv;
     }
 
+    /**
+     * Stelle den Debugmodus an oder aus.
+     */
     public static void setDebug (boolean pDebug)
     {
         debug = pDebug;
     }
 
+    /**
+     * @return Ob der Debugmodus aktiviert bzw deaktiviert ist.
+     */
     public static boolean getDebug ()
     {
         return debug;
     }
 
+    /**
+     * Sende eine Debugging-Nachricht an die Serverkonsole.
+     *
+     * <p>Die Nachricht wird mit einem Zeitstempel versehen.
+     *
+     * <p>Nachricht wird nur angezeigt, wenn der Debugmodus aktiviert ist. (Im Regelbetrieb
+     * ist sie also nicht zu sehen)
+     *
+     * @param msg Die anzuzeigende Nachricht.
+     */
     public static synchronized void debugMsg (String msg)
     {
         if (debug)
@@ -95,6 +124,13 @@ class Server
         }
     }
         
+    /**
+     * Sende eine Nachricht an die Serverkonsole.
+     *
+     * <p>Die Nachricht wird mit einem Zeitstempel versehen.
+     *
+     * @param msg Die anzuzeigende Nachricht.
+     */
     public static synchronized void consoleMsg (String msg)
     {
         System.out.println (String.format ("[  %s  ]   %s",
