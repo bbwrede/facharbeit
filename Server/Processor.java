@@ -44,13 +44,15 @@ public class Processor extends Thread
 
                         processCommand (vcmd, sender);
                     }
+                    // Wenn nicht registriert und empfangenes Kommando nicht %REG$ ... %:
                     else
                     {
-                        //TODO: Error an Client zurückgeben weil noch nicht registriert.
+                        ValidCommand rsp = new ValidCommand ();
+                        rsp.setType (Command.Type.RSP);
+                        rsp.setParams (new String[] {Command.RspCode.NOTREGISTERED.toString()});
+                        sender.sendCmd (rsp);
                     }
                 }
-
-                sender.sendCmd (cmd);
             }
             catch (InterruptedException e)
             {
@@ -68,31 +70,63 @@ public class Processor extends Thread
         switch (cmd.getType ())
         {
             case REG:
+                ValidCommand rsp = new ValidCommand ();
+                rsp.setType (Command.Type.RSP);
+                rsp.setUUID (cmd.getUUID ());
+                String nick = cmd.getParams()[0];
+
+                // Wenn der Absender sich bereits registriert hat:
                 if (sender.getNickname () != null)
                 {
-                    // TODO: rejecten
+                    rsp.setParams (new String[] {Command.RspCode.DENIED.toString()});
+                    Server.debugMsg (String.format (
+                                "Client versucht sich mit Nickname zu registrieren:    %s",
+                                nick
+                        ));
+                    Server.debugMsg ("Zurückgewiesen. Grund: Client hat bereits einen Nicknamen.");
                 }
+                // Wenn es diesen Nicknamen schon gibt:
+                else if (Server.getServer().getConnectionManager().isNicknameTaken(nick))
+                {
+                    rsp.setParams (new String[] {Command.RspCode.NICKALREADYTAKEN.toString()});
+                    Server.debugMsg (String.format (
+                                "Client versucht sich mit Nickname zu registrieren:    %s",
+                                nick
+                        ));
+                    Server.debugMsg ("Zurückgewiesen. Grund: Name bereits vergeben.");
+                }
+                // Wenn alles ok ist:
                 else
                 {
-                    sender.setNickname (cmd.getParams ()[0]);
-                }       
-                Server.debugMsg (String.format ("Client hat sich registriert:   %s",
-                                                (cmd.getParams ()[0])));
+                    rsp.setParams (new String[] {Command.RspCode.OK.toString()});
+                    sender.setNickname (nick);
+                    Server.consoleMsg (String.format (
+                                "Client hat sich registriert:   %s",
+                                nick
+                        ));
+                }
+                sender.sendCmd (rsp);
                 break;
 
             case MSG:
-                // params[0] ist addressat, params[1] ist die Nachricht (s. Protokoll)
+                // params[0] ist Adressat, params[1] ist die Nachricht (s. Protokoll)
                 // wenn params[0] == "*": nachricht an alle außer absender weiterleiten
                 // ansonsten: Nachricht an Connection mit nickname == params[0] weiterleiten
                 // Falls nicht vorhanden: Error zurückgeben (TODO)
                 
+                String adressat = cmd.getParams()[0];
+                String nachricht = cmd.getParams()[1];
+
                 Server.debugMsg (String.format ("Client hat Nachricht gesendet:"));
-                Server.debugMsg (String.format ("    %s - %s",
-                                                cmd.getParams ()[0],
-                                                cmd.getParams ()[1]));
+                Server.debugMsg (String.format (
+                            "    %s - %s",
+                            adressat,
+                            nachricht
+                    ));
                 
-                if (cmd.getParams()[0].equals ("*"))
+                if (adressat.equals ("*"))
                 {
+                    // An alle Clients außer den Absender verschicken
                     for (ClientConnection conn : Server.getServer ().getConnectionManager ())
                     {
                         if (!conn.getNickname ().equals (sender.getNickname ()))

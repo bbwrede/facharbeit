@@ -82,7 +82,16 @@ class ValidCommand implements Command
                 valid = (params.length == 2);
                 break;
             case RSP:
-                valid = (params.length == 1);
+                try
+                {
+                    Command.RspCode.valueOf (params[0]);
+                    valid = true;
+                }
+                catch (IllegalArgumentException e)
+                {
+                    valid = false;
+                }
+                valid = valid && (params.length == 1);
                 break;
             case HEARTBEAT:
                 valid = (params.length == 0);
@@ -143,6 +152,20 @@ class ValidCommand implements Command
     public void setType (Type pType)
     {
         type = pType;
+
+        switch (pType)
+        {
+            case MSG:
+                params = new String[2];
+                break;
+            case RSP:
+            case REG:
+                params = new String[1];
+            case LEAVE:
+            case GETSTAT:
+                params = new String[0];
+            //TODO: STAT
+        }
     }
 
     /**
@@ -175,5 +198,49 @@ class ValidCommand implements Command
     public void setUUID (String pUuid)
     {
         uuid = pUuid;
+    }
+
+    // Nachrichtentyp-spezifische Getter & Setter:
+
+    //TODO: Wenn Typ nicht zur aufgerufenen Methode passt: Exception throwen!
+    
+    public void MSG_setRecipient (String rec)
+    {
+        params[0] = rec;
+    }
+
+    public String MSG_getRecipient ()
+    {
+        return params[0];
+    }
+
+    public void MSG_setMessage (String msg)
+    {
+        params[1] = msg;
+    }
+
+    public String MSG_getMessage ()
+    {
+        return params[1];
+    }
+
+    public void RSP_setCode (Command.RspCode rspcode)
+    {
+        params[0] = rspcode.toString ();
+    }
+
+    public Command.RspCode RSP_getCode ()
+    {
+        return Command.RspCode.valueOf (params[0]);
+    }
+
+    public void REG_setNickname (String nick)
+    {
+        params[0] = nick;
+    }
+
+    public void REG_getNickname ()
+    {
+        return params[0];
     }
 }

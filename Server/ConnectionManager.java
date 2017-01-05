@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.lang.Iterable;
 import java.util.Iterator;
 
@@ -7,11 +7,11 @@ import java.util.Iterator;
  */
 class ConnectionManager implements Iterable<ClientConnection>
 {
-    private ArrayList<ClientConnection> connections;
+    private HashSet<ClientConnection> connections;
 
     public ConnectionManager ()
     {
-        connections = new ArrayList<ClientConnection> ();
+        connections = new HashSet<ClientConnection> ();
     }
 
     /**
@@ -50,6 +50,39 @@ class ConnectionManager implements Iterable<ClientConnection>
         }
 
         return null;
+    }
+
+    /**
+     * @return Alle momentan registrierten Nicknames.
+     */
+    public HashSet<String> getAllNicknames ()
+    {
+        HashSet<String> result = new HashSet<String> ();
+        for (ClientConnection conn : connections)
+        {
+            if (conn.getNickname() != null)
+            {
+                result.add (conn.getNickname ());
+            }  
+        }
+        return result;
+    }
+
+    /**
+     * @return Ob ein Nickname bereits vergeben ist.
+     *
+     * @param nick Der zu überprüfende Nickname
+     */
+    public boolean isNicknameTaken (String nick)
+    {
+        for (ClientConnection conn : connections)
+        {
+            if (conn.getNickname ().equals (nick))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Iterator<ClientConnection> iterator ()

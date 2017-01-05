@@ -35,14 +35,24 @@ interface Command
     /**
      * Repräsentiert den Typ eines Commands, gemäß dem Protokoll zu finden in protokoll.md
      */
-    public enum Type {
+    public enum Type
+    {
         MSG,
         RSP, 
         REG,
         HEARTBEAT,
         LEAVE,
         GETSTAT,
-        STAT;
+        STAT
+    }
+
+    public enum RspCode
+    {
+        OK,
+        DENIED,
+        NOSUCHNICK,
+        NICKALREADYTAKEN,
+        NOTREGISTERED
     }
 
     /**
@@ -50,3 +60,4 @@ interface Command
      */
     public abstract String getUUID ();
 }
+

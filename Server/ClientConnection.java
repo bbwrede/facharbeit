@@ -37,6 +37,8 @@ class ClientConnection
 
     private String nickname;
 
+    private boolean indicateStop;
+
     /**
      * Zuständig für eingehende Kommandos.
      */
@@ -51,7 +53,7 @@ class ClientConnection
 
         public void run ()
         {
-            while (true)
+            while (!indicateStop)
             {
                 if (scanner.hasNextLine ())
                 {
@@ -95,7 +97,7 @@ class ClientConnection
 
         public void run ()
         {
-            while (true)
+            while (!indicateStop)
             {
                 try
                 {
@@ -147,8 +149,7 @@ class ClientConnection
      */
     public void stop ()
     {
-        threadIn.stop ();
-        threadOut.stop ();
+        indicateStop = true;
     }
 
     /**
