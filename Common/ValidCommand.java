@@ -88,7 +88,7 @@ class ValidCommand implements Command
                 valid = (params.length == 0);
                 break;
             case REG:
-                valid = ((params.length == 1) && isValidNickname (params[0]));
+                valid = (params.length == 1);
                 break;
             case GETSTAT:
                 valid = (params.length == 0);
