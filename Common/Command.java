@@ -46,6 +46,9 @@ interface Command
         STAT
     }
 
+    /**
+     * Repräsentiert den Typ einer Antwort auf ein Kommando
+     */
     public enum RspCode
     {
         OK,

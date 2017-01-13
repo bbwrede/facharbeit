@@ -55,27 +55,35 @@ class ClientConnection
         {
             while (!indicateStop)
             {
-                if (scanner.hasNextLine ())
+                try
                 {
-                    String line = scanner.nextLine ();
+                    if (scanner.hasNextLine ())
+                    {
+                        String line = scanner.nextLine ();
 
-                    // Wenn in Zeile kein Command enthalten ist, überspringen.
-                    if (!line.matches ("[^%]*%[^%]+%[^%]*"))
-                    {
-                        continue;
-                    }
+                        // Wenn in Zeile kein Command enthalten ist, überspringen.
+                        if (!line.matches ("[^%]*%[^%]+%[^%]*"))
+                        {
+                            continue;
+                        }
 
-                    line = line.trim ();
-                    Command cmd;
-                    try
-                    {
-                        cmd = new ValidCommand (line);
+                        line = line.trim ();
+                        Command cmd;
+                        try
+                        {
+                            cmd = new ValidCommand (line);
+                        }
+                        catch (Command.ParsingException e)
+                        {
+                            cmd = new InvalidCommand (line);
+                        }
+                        Server.getServer ().getProcessor ().enqueue (cmd, ClientConnection.this);
                     }
-                    catch (Command.ParsingException e)
-                    {
-                        cmd = new InvalidCommand (line);
-                    }
-                    Server.getServer ().getProcessor ().enqueue (cmd, ClientConnection.this);
+                }
+                catch (Exception e)
+                {
+                    Server.getServer().getConnectionManager().remove(this);
+                    indicateStop = true;
                 }
             }
         }
@@ -108,6 +116,11 @@ class ClientConnection
                 catch (InterruptedException e)
                 {
                     e.printStackTrace ();
+                }
+                catch (Exception e)
+                {
+                    Server.getServer().getConnectionManager().remove(this);
+                    indicateStop = true;
                 }
             }
         }

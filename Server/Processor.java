@@ -88,7 +88,7 @@ public class Processor extends Thread
                 // Wenn es diesen Nicknamen schon gibt:
                 else if (Server.getServer().getConnectionManager().isNicknameTaken(nick))
                 {
-                    rsp.setParams (new String[] {Command.RspCode.NICKALREADYTAKEN.toString()});
+                    rsp.RSP_setCode(Command.RspCode.NICKALREADYTAKEN);
                     Server.debugMsg (String.format (
                                 "Client versucht sich mit Nickname zu registrieren:    %s",
                                 nick
@@ -98,7 +98,7 @@ public class Processor extends Thread
                 // Wenn alles ok ist:
                 else
                 {
-                    rsp.setParams (new String[] {Command.RspCode.OK.toString()});
+                    rsp.setCode(Command.RspCode.OK);
                     sender.setNickname (nick);
                     Server.consoleMsg (String.format (
                                 "Client hat sich registriert:   %s",
@@ -123,6 +123,8 @@ public class Processor extends Thread
                             adressat,
                             nachricht
                     ));
+
+                boolean nicksExist = true;
                 
                 if (adressat.equals ("*"))
                 {
@@ -144,10 +146,13 @@ public class Processor extends Thread
                     }
                     else
                     {
-                        // TODO: Error zurückgeben weil Nutzer nicht vorhanden.
+                        nicksExist = false;
                     }
                 }
 
+                // Response erstellen
+                ValidCommand rsp = new ValidCommand();
+                rsp.setUUID (cmd.getUUID)
                 break; 
                         
         }
