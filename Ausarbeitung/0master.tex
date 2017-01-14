@@ -1,0 +1,32 @@
+
+\documentclass[12pt, ngerman]{article}
+\usepackage[T1]{fontenc}
+\usepackage[latin1]{inputenc}
+\usepackage[ngerman]{babel}
+
+\author{Fynn Lohse und Lukas Middelberg}
+\title{Facharbeit Titel}
+
+\newcommand{\namesigdate}[2][5cm]{%
+  \begin{tabular}{@{}p{#1}@{}}
+    #2 \\[2\normalbaselineskip] \hrule \\[0pt]
+    {\small \textit{Unterschrift}} \\[2\normalbaselineskip] \hrule \\[0pt]
+    {\small \textit{Datum}}
+  \end{tabular}
+}
+
+
+\begin{document}
+
+\begin{titlepage}
+\maketitle
+\end{titlepage}
+
+\tableofcontents
+
+\include{1einl}
+\include{2zurSoftware}
+\include{3modellierungImplementation}
+\include{4selbstst}
+
+\end{document}

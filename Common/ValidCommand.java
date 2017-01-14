@@ -239,7 +239,7 @@ class ValidCommand implements Command
         params[0] = nick;
     }
 
-    public void REG_getNickname ()
+    public String REG_getNickname ()
     {
         return params[0];
     }

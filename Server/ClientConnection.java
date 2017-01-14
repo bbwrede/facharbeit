@@ -82,7 +82,7 @@ class ClientConnection
                 }
                 catch (Exception e)
                 {
-                    Server.getServer().getConnectionManager().remove(this);
+                    Server.getServer().getConnectionManager().remove(ClientConnection.this);
                     indicateStop = true;
                 }
             }
@@ -119,7 +119,7 @@ class ClientConnection
                 }
                 catch (Exception e)
                 {
-                    Server.getServer().getConnectionManager().remove(this);
+                    Server.getServer().getConnectionManager().remove(ClientConnection.this);
                     indicateStop = true;
                 }
             }

@@ -49,7 +49,7 @@ public class Processor extends Thread
                     {
                         ValidCommand rsp = new ValidCommand ();
                         rsp.setType (Command.Type.RSP);
-                        rsp.setParams (new String[] {Command.RspCode.NOTREGISTERED.toString()});
+                        rsp.RSP_setCode (Command.RspCode.NOTREGISTERED);
                         sender.sendCmd (rsp);
                     }
                 }
@@ -73,7 +73,7 @@ public class Processor extends Thread
                 ValidCommand rsp = new ValidCommand ();
                 rsp.setType (Command.Type.RSP);
                 rsp.setUUID (cmd.getUUID ());
-                String nick = cmd.getParams()[0];
+                String nick = cmd.REG_getNick();
 
                 // Wenn der Absender sich bereits registriert hat:
                 if (sender.getNickname () != null)
@@ -98,7 +98,7 @@ public class Processor extends Thread
                 // Wenn alles ok ist:
                 else
                 {
-                    rsp.setCode(Command.RspCode.OK);
+                    rsp.RSP_setCode(Command.RspCode.OK);
                     sender.setNickname (nick);
                     Server.consoleMsg (String.format (
                                 "Client hat sich registriert:   %s",
@@ -152,7 +152,7 @@ public class Processor extends Thread
 
                 // Response erstellen
                 ValidCommand rsp = new ValidCommand();
-                rsp.setUUID (cmd.getUUID)
+                rsp.setUUID (cmd.getUUID ());
                 break; 
                         
         }
