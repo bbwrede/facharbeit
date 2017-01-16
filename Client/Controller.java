@@ -4,7 +4,8 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
-public class Controller implements ActionListener
+
+public class Controller extends Thread implements ActionListener
 {
 	private GUI gui;
 	private Client client;
@@ -45,6 +46,25 @@ public class Controller implements ActionListener
 			client.sendMessage(gui.getMessage());
 		}
 		
+	}
+	
+	public void run()
+	{
+		client.heartbeat();
+		while(true)
+		{
+			if (client.getMessage() != null)
+			{
+				try
+				{
+					ValidCommand cmd = new ValidCommand(client.getMessage());
+					gui.showMessage(cmd.getParams()[1], cmd.getParams()[2]);
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public static void main(String[] args)

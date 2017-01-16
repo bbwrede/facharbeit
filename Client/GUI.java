@@ -63,6 +63,33 @@ public class GUI extends JFrame
 		setContentPane(contentPane);
 		contentPane.setLayout(new CardLayout(0, 0));
 		
+		panelChat = new JPanel();
+		contentPane.add(panelChat, "name_888544075012192");
+		panelChat.setLayout(null);
+		
+		spChat = new JScrollPane();
+		spChat.setBounds(6, 6, 622, 313);
+		panelChat.add(spChat);
+		
+		taChat = new JTextArea();
+		taChat.setEditable(false);
+		spChat.setViewportView(taChat);
+		
+		spText = new JScrollPane();
+		spText.setBounds(6, 330, 622, 55);
+		panelChat.add(spText);
+		
+		tpText = new HintTextPane("Hier die Nachricht eingeben");
+		spText.setViewportView(tpText);
+		
+		btnSend = new JButton("Absenden");
+		btnSend.setBounds(538, 387, 90, 28);
+		panelChat.add(btnSend);
+		
+		btnDelete = new JButton("L\u00F6schen");
+		btnDelete.setBounds(436, 387, 90, 28);
+		panelChat.add(btnDelete);
+		
 		panelConnect = new JPanel();
 		contentPane.add(panelConnect, "name_888544057830218");
 		panelConnect.setLayout(null);
@@ -109,33 +136,6 @@ public class GUI extends JFrame
 		btnExit.setBounds(345, 350, 92, 28);
 		panelConnect.add(btnExit);
 		
-		panelChat = new JPanel();
-		contentPane.add(panelChat, "name_888544075012192");
-		panelChat.setLayout(null);
-		
-		spChat = new JScrollPane();
-		spChat.setBounds(6, 6, 622, 313);
-		panelChat.add(spChat);
-		
-		taChat = new JTextArea();
-		spChat.setViewportView(taChat);
-		
-		spText = new JScrollPane();
-		spText.setBounds(6, 330, 622, 55);
-		panelChat.add(spText);
-		
-		tpText = new JTextPane();
-		tpText.setText("Hier die Nachricht eingeben");
-		spText.setViewportView(tpText);
-		
-		btnSend = new JButton("Absenden");
-		btnSend.setBounds(538, 387, 90, 28);
-		panelChat.add(btnSend);
-		
-		btnDelete = new JButton("L\u00F6schen");
-		btnDelete.setBounds(436, 387, 90, 28);
-		panelChat.add(btnDelete);
-		
 		setVisible(true);
 	}
 	
@@ -153,6 +153,11 @@ public class GUI extends JFrame
 	{
 		panelConnect.setVisible(false);
 		panelChat.setVisible(true);
+	}
+	
+	public void showMessage(String pMessage, String pUser)
+	{
+		taChat.setText(taChat.getText() + "\n" + pUser + " : " + pMessage);
 	}
 	
 	public String getHostname()
