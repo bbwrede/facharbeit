@@ -64,26 +64,16 @@ public class Client extends Thread
 		},  0 ,30000);
 	}
 	
-	public void run()
+	public String getMessage()
 	{
-		heartbeat();
 		while (true)
 		{	
-			
 			if (reader.hasNextLine())
 			{
 				String cmd = reader.nextLine();
 				System.out.println(cmd);
+				return cmd;
 			}
-			
-			try
-            {
-                Thread.sleep (50);
-            }
-            catch (InterruptedException e)
-            {
-                e.printStackTrace ();
-            }
 		}
 	}
 	
